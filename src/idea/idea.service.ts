@@ -3,6 +3,7 @@ import { Repository } from "typeorm";
 import { InjectRepository } from "@nestjs/typeorm";
 
 import { IdeaEntity } from "./idea.entity";
+import { IdeaDTO } from "./idea.dto";
 
 @Injectable()
 export class IdeaService {
@@ -14,7 +15,7 @@ export class IdeaService {
     return await this.ideaRepository.find();
   }
 
-  async create() {
+  async create(data: IdeaDTO) {
     const idea = await this.ideaRepository.create(data);
     await this.ideaRepository.save(idea);
     return idea;
@@ -26,7 +27,7 @@ export class IdeaService {
     });
   }
 
-  async update(id: string, data) {
+  async update(id: string, data: IdeaDTO) {
     await this.ideaRepository.update(
       {
         id
