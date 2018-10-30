@@ -27,7 +27,7 @@ export class IdeaService {
     });
   }
 
-  async update(id: string, data: IdeaDTO) {
+  async update(id: string, data: Partial<IdeaDTO>) {
     await this.ideaRepository.update(
       {
         id
