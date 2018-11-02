@@ -33,7 +33,7 @@ export class IdeaService {
   }
 
   async update(id: string, data: Partial<IdeaDTO>) {
-    const idea = await this.ideaRepository.findOne({
+    let idea = await this.ideaRepository.findOne({
       where: { id }
     });
 
@@ -47,6 +47,9 @@ export class IdeaService {
       },
       data
     );
+
+    idea = await this.ideaRepository.findOne({ where: { id } });
+
     return idea;
   }
 
