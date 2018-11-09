@@ -13,11 +13,11 @@ export class UserService {
 
   async showAll() {
     const users = await this.userRepository.find();
-    return users.map(user => user.toResponseObject());
+    return users.map(user => user.toResponseObject(false));
   }
   async login(data: UserDTO) {
     const { username, password } = data;
-    const user = await this.userRepository.find({
+    const user = await this.userRepository.findOne({
       where: {
         username
       }
@@ -28,6 +28,21 @@ export class UserService {
         HttpStatus.BAD_REQUEST
       );
     }
+    return user.toResponseObject;
   }
-  register(data: UserDTO) {}
+  async register(data: UserDTO) {
+    const { username } = data;
+    let user = await this.userRepository.findOne({
+      where: { username }
+    });
+    if (user) {
+      throw new HttpException("User already exists", HttpStatus.BAD_REQUEST);
+    }
+
+    user = await this.userRepository.create(data);
+
+    await this.userRepository.save(user);
+
+    return user.toResponseObject();
+  }
 }
